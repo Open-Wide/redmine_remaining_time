@@ -27,11 +27,28 @@ module RedmineRemainingTime
   module InstanceMethods
   
     def update_done_ratio_from_remaining_hours
-      total_hours = self.total_spent_hours.to_f + self.remaining_hours.to_f
-      if ( total_hours ) != 0
-        self.done_ratio = self.total_spent_hours.to_f / ( total_hours ) * 100
+      leaves_count = self.leaves.count
+      if leaves_count > 0
+        average = self.leaves.where("estimated_hours > 0").average(:estimated_hours).to_f
+        if average == 0
+          average = 1
+        end
+        done = self.leaves.joins(:status).
+          sum("COALESCE(CASE WHEN estimated_hours > 0 THEN estimated_hours ELSE NULL END, #{average}) " +
+              "* (CASE WHEN is_closed = #{connection.quoted_true} THEN 100 ELSE COALESCE(done_ratio, 0) END)").to_f
+        progress = done / (average * leaves_count)
+        self.done_ratio = progress.round
       else
-        self.done_ratio = 0
+        if self.remaining_hours.eql? 0.0
+     	  self.done_ratio = 100
+        else
+          total_hours = self.total_spent_hours.to_f + self.remaining_hours.to_f
+          if ( total_hours ) != 0
+            self.done_ratio = self.total_spent_hours.to_f / ( total_hours ) * 100
+          else
+            self.done_ratio = 0
+          end
+        end
       end
     end
   
