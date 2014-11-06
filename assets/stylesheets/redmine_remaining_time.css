@@ -1,0 +1,26 @@
+/* Bas */
+table.issues .priority-1 .priority {
+}
+
+/* Normal */
+table.issues .priority-2 .priority {
+  color: #1B4F08;
+}
+
+/* Haut */
+table.issues .priority-3 .priority {
+  color: #FFFFFF;
+  background-color: #F89406;
+}
+
+/* Urgent */
+table.issues .priority-4 .priority {
+  color: #FFFFFF;
+  background-color: #B94A48;
+}
+
+/* Immédiat */
+table.issues .priority-5 .priority {
+  color: #FFFFFF;
+  background-color: #333333;
+}
