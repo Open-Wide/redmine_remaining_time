@@ -26,6 +26,10 @@ module RedmineRemainingTime
 
   module InstanceMethods
   
+    def total_hours
+      self.total_spent_hours.to_f + self.remaining_hours.to_f
+    end
+    
     def update_done_ratio_from_remaining_hours
       leaves_count = self.leaves.count
       if leaves_count > 0
@@ -42,9 +46,8 @@ module RedmineRemainingTime
         if self.remaining_hours.eql? 0.0
      	  self.done_ratio = 100
         else
-          total_hours = self.total_spent_hours.to_f + self.remaining_hours.to_f
-          if ( total_hours ) != 0
-            self.done_ratio = self.total_spent_hours.to_f / ( total_hours ) * 100
+          if ( self.total_hours ) != 0
+            self.done_ratio = self.total_spent_hours.to_f / ( self.total_hours ) * 100
           else
             self.done_ratio = 0
           end

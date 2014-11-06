@@ -14,6 +14,11 @@ module RedmineRemainingTime
             :default_order => 'desc',
             :caption => :label_total_spent_time
           ))
+        base.add_available_column(QueryColumn.new(:total_hours,
+            :sortable => "COALESCE((SELECT SUM(hours) FROM #{TimeEntry.table_name} time_entry LEFT JOIN #{Issue.table_name} child_issue ON time_entry.issue_id = child_issue.id WHERE #{TimeEntry.table_name}.issue_id = #{Issue.table_name}.id OR child_issue.parent_id IS NOT NULL), 0) - #{Issue.table_name}.remaining_hours",
+            :default_order => 'desc',
+            :caption => :label_total_time
+          ))
       end
     end
   end
