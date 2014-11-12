@@ -58,7 +58,7 @@ module RedmineRemainingTime
     def recalculate_attributes_for_with_remaining_hours(issue_id)
       if issue_id && p = Issue.find_by_id(issue_id)
         # remaining = sum of leaves remaining
-        p.remaining_hours = p.leaves.sum(:remaining_hours).to_f
+        p.remaining_hours = p.leaves.sum(:remaining_hours).to_f.round(2)
         p.remaining_hours = nil if p.remaining_hours == 0.0
         p.save(:validate => false)
       end
