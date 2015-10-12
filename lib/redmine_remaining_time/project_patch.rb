@@ -7,7 +7,7 @@ module RedmineRemainingTime
       base.send(:include, InstanceMethods)
 
       base.class_eval do
-        Issue.safe_attributes 'remaining_hours', 'sold_hours'
+        Issue.safe_attributes 'remaining_hours'
         unloadable
         alias_method_chain :recalculate_attributes_for, :remaining_hours
         alias_method_chain :css_classes, :remaining_hours

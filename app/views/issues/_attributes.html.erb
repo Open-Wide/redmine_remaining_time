@@ -62,6 +62,10 @@
 </p>
 <% end %>
 
+<% if @issue.safe_attribute? 'sold_hours' %>
+<p><%= f.text_field :sold_hours, :size => 3, :required => @issue.required_attribute?('sold_hours') %> <%= l(:field_hours) %></p>
+<% end %>
+
 <% if @issue.safe_attribute? 'estimated_hours' %>
 <p><%= f.text_field :estimated_hours, :size => 3, :disabled => !@issue.leaf?, :required => @issue.required_attribute?('estimated_hours') %> <%= l(:field_hours) %></p>
 <% end %>

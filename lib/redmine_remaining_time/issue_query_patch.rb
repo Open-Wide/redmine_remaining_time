@@ -10,6 +10,7 @@ module RedmineRemainingTime
         unloadable
         base.add_available_column(QueryColumn.new(:remaining_hours, :sortable => "#{Issue.table_name}.remaining_hours"))
         base.add_available_column(QueryColumn.new(:delta_hours, :sortable => "#{Issue.table_name}.delta_hours"))
+        base.add_available_column(QueryColumn.new(:sold_hours, :sortable => "#{Issue.table_name}.sold_hours"))
         base.add_available_column(QueryColumn.new(:total_spent_hours,
             :sortable => "COALESCE((SELECT SUM(hours) FROM #{TimeEntry.table_name} time_entry LEFT JOIN #{Issue.table_name} child_issue ON time_entry.issue_id = child_issue.id WHERE #{TimeEntry.table_name}.issue_id = #{Issue.table_name}.id OR child_issue.parent_id IS NOT NULL), 0)",
             :default_order => 'desc',
