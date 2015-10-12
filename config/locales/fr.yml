@@ -1,6 +1,10 @@
 fr:
+    project_times: Temps projet
+    field_sold_hours: Temps vendu
     field_remaining_hours: Temps restant
     field_delta_hours: Delta
     label_total_spent_time: Temps passé total
     label_total_time: Temps total
     label_delta_time: Delta
+    label_delta_sold_time: Delta / temps vendu
+    label_delta_estimated_time: Delta / temps estimé
