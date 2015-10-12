@@ -24,3 +24,27 @@ table.issues .priority-5 .priority {
   color: #FFFFFF;
   background-color: #333333;
 }
+
+table.issues tr.parent td.estimated_hours, 
+table.issues tr.parent td.remaining_hours, 
+table.issues tr.parent td.total_spent_hours, 
+table.issues tr.parent td.total_hours, 
+table.issues tr.parent td.spent_hours, 
+table.issues tr.parent td.delta_hours {
+    font-weight: bold
+}
+
+div.issue table.attributes .delta-hours-less,
+table.issues tr.delta-hours-less td.delta_hours {
+    color: #800
+}
+
+div.issue table.attributes .delta-hours-more,
+table.issues tr.delta-hours-more td.delta_hours {
+    color: #005f00
+}
+
+div.issue table.attributes .delta-hours-exact,
+table.issues tr.delta-hours-exact td.delta_hours  {
+    color: #F89406
+}

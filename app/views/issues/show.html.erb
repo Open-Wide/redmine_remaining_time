@@ -72,6 +72,9 @@
     unless @issue.total_hours.nil?
       rows.right l(:label_total_time), l_hours(@issue.total_hours), :class => 'total-hours'
     end
+    unless @issue.delta_hours.nil?
+      rows.right l(:label_delta_time), l_hours(@issue.delta_hours), :class => "delta-hours delta-hours-#{ @issue.delta_hours_status }"
+    end
   end
 end %>
 <%= render_custom_fields_rows(@issue) %>

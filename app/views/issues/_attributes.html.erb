@@ -66,17 +66,16 @@
 <p><%= f.text_field :estimated_hours, :size => 3, :disabled => !@issue.leaf?, :required => @issue.required_attribute?('estimated_hours') %> <%= l(:field_hours) %></p>
 <% end %>
 
-<% if @issue.safe_attribute?('done_ratio') && @issue.leaf? && Issue.use_field_for_done_ratio? %>
-<p><%= f.text_field :done_ratio, :size => 3, :disabled => true, :required => @issue.required_attribute?('done_ratio') %></p>
-<% end %>
-
 <% if @issue.safe_attribute? 'remaining_hours' %>
 <p><%= f.text_field :remaining_hours, :size => 3, :disabled => !@issue.leaf?, :required => @issue.required_attribute?('remaining_hours') %> <%= l(:field_hours) %></p>
 <% end %>
 
-</div>
-</div>
+<% if @issue.safe_attribute?('done_ratio') && @issue.leaf? && Issue.use_field_for_done_ratio? %>
+<p><%= f.text_field :done_ratio, :size => 3, :disabled => true, :required => @issue.required_attribute?('done_ratio') %></p>
+<% end %>
 
+</div>
+</div>
 <% if @issue.safe_attribute? 'custom_field_values' %>
 <%= render :partial => 'issues/form_custom_fields' %>
 <% end %>

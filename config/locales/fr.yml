@@ -1,4 +1,6 @@
 fr:
     field_remaining_hours: Temps restant
+    field_delta_hours: Delta
     label_total_spent_time: Temps passé total
     label_total_time: Temps total
+    label_delta_time: Delta
