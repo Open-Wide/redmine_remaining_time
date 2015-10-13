@@ -16,8 +16,8 @@ module RedmineRemainingTime
           estimated_hours = project.issues.where('parent_id IS NULL').sum(:estimated_hours)
           remaining_hours = project.issues.where('parent_id IS NULL').sum(:remaining_hours)
           spent_time = project.time_entries.sum(:hours)
-          delta_sold_time = sold_hours - ( remaining_hours + spent_time )
-          delta_estimated_time = estimated_hours - ( remaining_hours + spent_time )
+          delta_sold_time = remaining_hours + spent_time - sold_hours
+          delta_estimated_time = remaining_hours + spent_time - estimated_hours
           # Why can't I access protect_against_forgery?
           return %{
             <div id="remaining_time_view_issues_sidebar">
