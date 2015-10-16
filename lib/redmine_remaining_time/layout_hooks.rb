@@ -16,6 +16,12 @@ module RedmineRemainingTime
           estimated_hours = project.issues.where('parent_id IS NULL').sum(:estimated_hours)
           remaining_hours = project.issues.where('parent_id IS NULL').sum(:remaining_hours)
           spent_time = project.time_entries.sum(:hours)
+          if project && !project.descendants.active.empty?
+            sold_hours += project.descendants.sum{ |p| p.issues.sum(:sold_hours) }
+            estimated_hours += project.descendants.sum{ |p| p.issues.where('parent_id IS NULL').sum(:estimated_hours) }
+            remaining_hours += project.descendants.sum{ |p| p.issues.where('parent_id IS NULL').sum(:remaining_hours) }
+            spent_time += project.descendants.sum{ |p| p.time_entries.sum(:hours) }
+          end
           delta_sold_time = remaining_hours + spent_time - sold_hours
           delta_estimated_time = remaining_hours + spent_time - estimated_hours
           # Why can't I access protect_against_forgery?
