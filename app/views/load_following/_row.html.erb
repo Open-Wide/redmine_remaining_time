@@ -12,11 +12,11 @@
       <td class="estimated_hours">
           <%= "%.2f" % issue.estimated_hours if issue.leaf? and !issue.estimated_hours.nil? %>
       </td>
-      <td class="total_spent_hours">
-          <%= "%.2f" % issue.spent_hours if issue.leaf? and !issue.spent_hours.nil? %>
+      <td class="spent_hours_previous_week">
+          <%= "%.2f" % issue.spent_hours_previous_week if issue.leaf? and !issue.spent_hours_previous_week.nil? %>
       </td>
-      <td class="total_spent_hours">
-          <%= "%.2f" % issue.spent_hours if issue.leaf? and !issue.spent_hours.nil? %>
+      <td class="spent_hours_current_week">
+          <%= "%.2f" % issue.spent_hours_current_week if issue.leaf? and !issue.spent_hours_current_week.nil? %>
       </td>
       <td class="total_spent_hours">
           <%= "%.2f" % issue.spent_hours if issue.leaf? and !issue.spent_hours.nil? %>

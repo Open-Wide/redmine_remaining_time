@@ -22,6 +22,33 @@ module RedmineRemainingTime
       def self.use_status_for_done_ratio?
         false
       end
+      
+      def first_wday
+        case Setting.start_of_week.to_i
+        when 1
+          @first_wday ||= (1 - 1)%7 + 1
+        when 6
+          @first_wday ||= (6 - 1)%7 + 1
+        when 7
+          @first_wday ||= (7 - 1)%7 + 1
+        else
+          @first_wday ||= (l(:general_first_day_of_week).to_i - 1)%7 + 1
+        end
+      end
+
+      def last_wday
+        @last_wday ||= (Issue.first_wday + 5)%7 + 1
+      end
+      
+      def previousw_enddate
+        date = Date.today
+        @previousw_enddate ||= date - date.wday - Issue.last_wday
+      end
+      
+      def currentw_startdate
+        date  = Date.today
+        @currentw_startdate ||= date - date.wday + Issue.first_wday
+      end
     end
 
     module InstanceMethods
@@ -30,8 +57,16 @@ module RedmineRemainingTime
         @total_hours ||= ( self.total_spent_hours.to_f + self.remaining_hours.to_f ).round(2) || 0
       end
   
+      def spent_hours_previous_week
+        @spent_hours_previous_week ||= time_entries.where('spent_on <= ?', Issue.previousw_enddate).sum(:hours) || 0
+      end
+  
+      def spent_hours_current_week
+        @spent_hours_current_week ||= time_entries.where('spent_on > ?', Issue.previousw_enddate).sum(:hours) || 0
+      end
+  
       def delta_hours
-        @delta_hours ||= ( self.total_hours.to_f - self.estimated_hours.to_f ).round(2) || 0
+        @delta_hours ||= ( self.total_hours.to_f - self.estimated_hours.to_f ) || 0
       end
     
       def delta_hours_status
