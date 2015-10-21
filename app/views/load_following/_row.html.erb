@@ -1,0 +1,48 @@
+<tr id="issue-<%= h(issue.id) %>" class="<%= issue_css_classes %>">
+    <td class="id">
+        <%= link_to(issue.id, issue_path(issue)) %>
+    </td>
+    <td class="subject">
+        <%= link_to(issue, issue_path(issue)) %>
+    </td>
+    <td class="sold_hours">
+        <%= "%.2f" % issue.sold_hours unless issue.sold_hours.nil? %>
+    </td>
+    <td class="estimated_hours">
+        <%= "%.2f" % issue.estimated_hours if issue.leaf? and !issue.estimated_hours.nil? %>
+    </td>
+    <td class="total_spent_hours">
+        <%= "%.2f" % issue.spent_hours if issue.leaf? and !issue.spent_hours.nil? %>
+    </td>
+    <td class="total_spent_hours">
+        <%= "%.2f" % issue.spent_hours if issue.leaf? and !issue.spent_hours.nil? %>
+    </td>
+    <td class="total_spent_hours">
+        <%= "%.2f" % issue.spent_hours if issue.leaf? and !issue.spent_hours.nil? %>
+    </td>
+    <td class="remaining_hours">
+        <%= "%.2f" % issue.remaining_hours if issue.leaf? and !issue.remaining_hours.nil? %>
+    </td>
+    <td class="remaining_hours">
+        <%= "%.2f" % issue.remaining_hours if issue.leaf? and !issue.remaining_hours.nil? %>
+    </td>
+    <td class="total_hours">
+        <%= "%.2f" % issue.total_hours if issue.leaf? and !issue.total_hours.nil? %>
+    </td>
+    <td class="total_hours">
+        <%= "%.2f" % issue.total_hours if issue.leaf? and !issue.total_hours.nil? %>
+    </td>
+    <td class="delta_hours">
+        <%= "%.2f" % issue.delta_hours if issue.leaf? and !issue.delta_hours.nil? %>
+    </td>
+    <td class="done_ratio">
+        <%= "%d" % issue.done_ratio if issue.leaf? and !issue.done_ratio.nil? %>
+    </td>
+</tr>
+<% depth += 1 %>
+<% if !issue.descendants.empty? %>
+  <% for subissue in issue.descendants %>
+    <% issue_css_classes = "#{subissue.css_classes} idnt idnt-#{depth}" %>
+    <%= render 'row', issue: subissue, issue_css_classes: issue_css_classes, depth: depth %>
+  <% end %>
+<% end %>

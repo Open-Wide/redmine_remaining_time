@@ -48,3 +48,15 @@ div.issue table.attributes .delta-hours-exact,
 table.issues tr.delta-hours-exact td.delta_hours  {
     color: #F89406
 }
+
+.controller-load_following #sidebar {
+    display: none;
+}
+
+.controller-load_following #content {
+    width: 100%;
+}
+
+.controller-load_following table.list th {
+    white-space: normal
+}

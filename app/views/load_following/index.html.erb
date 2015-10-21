@@ -1,0 +1,135 @@
+<div class="project_load_following">
+    <h2><%= @project %></h2>
+    <div class="autoscroll">
+        <table class="list issues">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Sujet
+                    </th>
+                    <th>
+                        Budget retenu
+                    </th>
+                    <th>
+                        Charge initiale
+                    </th>
+                    <th>
+                        Consommé cumulé à fin de sem-1
+                    </th>
+                    <th>
+                        Consommé sur sem
+                    </th>
+                    <th>
+                        Consommé cumulé à fin de sem
+                    </th>
+                    <th>
+                        RAF à sem-1
+                    </th>
+                    <th>
+                        RAF à fin de sem
+                    </th>
+                    <th>
+                        Écart cumulé à fin sem-1
+                    </th>
+                    <th>
+                        Écart cumulé à fin sem
+                    </th>
+                    <th>
+                        Écart sur sem
+                    </th>
+                    <th>
+                        % avancement global à fin sem
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for issue in @issues %>
+                  <% 
+                  depth = 0
+                  issue_css_classes = "#{cycle('odd', 'even')} #{issue.css_classes}"
+                %>
+                  <%= render 'row', issue: issue, issue_css_classes: issue_css_classes, depth: depth %>
+                <% end %>
+                <% for subproject in @subprojects %>
+                  <tr id="project-<%= h(subproject[:project].id) %>" class="hascontextmenu <%= cycle('odd', 'even') %>">
+                      <td class="id"></td>
+                      <td class="subject">
+                          <%= link_to(subproject[:project], project_path(subproject[:project])) %>
+                      </td>
+                      <td class="sold_hours">
+                      </td>
+                      <td class="estimated_hours">
+                      </td>
+                      <td class="total_spent_hours">
+                      </td>
+                      <td class="total_spent_hours">
+                      </td>
+                      <td class="total_spent_hours">
+                      </td>
+                      <td class="remaining_hours">
+                      </td>
+                      <td class="remaining_hours">
+                      </td>
+                      <td class="total_hours">
+                      </td>
+                      <td class="total_hours">
+                      </td>
+                      <td class="delta_hours">
+                      </td>
+                      <td class="done_ratio">
+                      </td>
+                  </tr>
+                  <% for issue in subproject[:issues] %>
+                    <% 
+                    depth = 1
+                    issue_css_classes = "#{issue.css_classes} idnt idnt-#{depth}"
+                  %>
+                    <%= render 'row', issue: issue, issue_css_classes: issue_css_classes, depth: depth %>
+                  <% end %>
+                <% end %>
+            </tbody>
+            <tfooter>
+                <tr>
+                    <td class="id"></td>
+                    <td class="subject">Totaux</td>
+                    <td class="sold_hours">
+                        <%= "%.2f" % @sum_sold_hours  %>
+                    </td>
+                    <td class="estimated_hours">
+                        <%= "%.2f" % @sum_estimated_hours  %>
+                    </td>
+                    <td class="total_spent_hours">
+                        <%= "%.2f" % @sum_spent_time  %>
+                    </td>
+                    <td class="total_spent_hours">
+                        <%= "%.2f" % @sum_spent_time  %>
+                    </td>
+                    <td class="total_spent_hours">
+                        <%= "%.2f" % @sum_spent_time  %>
+                    </td>
+                    <td class="remaining_hours">
+                        <%=  "%.2f" % @sum_remaining_hours  %>
+                    </td>
+                    <td class="remaining_hours">
+                        <%= "%.2f" % @sum_remaining_hours  %>
+                    </td>
+                    <td class="total_hours">
+                        <%= "%.2f" % @sum_total_hours  %>
+                    </td>
+                    <td class="total_hours">
+                        <%= "%.2f" % @sum_total_hours  %>
+                    </td>
+                    <td class="delta_hours">
+                        <%= "%.2f" % @sum_delta_estimated_time  %>
+                    </td>
+                    <td class="done_ratio">
+                        <%= "%.2f" % @sum_done_ration  %>
+                    </td>
+                </tr>
+            </tfooter>
+        </table>
+    </div>
+</div>
