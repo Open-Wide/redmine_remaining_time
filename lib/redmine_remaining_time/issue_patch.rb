@@ -28,7 +28,11 @@ module RedmineRemainingTime
   module InstanceMethods
   
     def total_hours
-      ( self.total_spent_hours.to_f + self.remaining_hours.to_f ).round(2)
+      @total_hours ||= ( self.total_spent_hours.to_f + self.remaining_hours.to_f ).round(2) || 0
+    end
+  
+    def delta_hours
+      @delta_hours ||= ( self.total_hours.to_f - self.estimated_hours.to_f ).round(2) || 0
     end
     
     def delta_hours_status
@@ -64,7 +68,6 @@ module RedmineRemainingTime
           end
         end
       end
-      self.estimated_hours.nil? ? self.delta_hours = nil : self.delta_hours = ( self.total_hours.to_f - self.estimated_hours ).round(2)
     end
 
     def recalculate_attributes_for_with_remaining_hours(issue_id)
@@ -76,7 +79,6 @@ module RedmineRemainingTime
         p.save(:validate => false)
       end
       recalculate_attributes_for_without_remaining_hours(issue_id)
-      p.estimated_hours.nil? ? p.delta_hours = nil : p.delta_hours = ( p.total_hours - p.estimated_hours ).round(2)
     end
     
     def css_classes_with_remaining_hours(user=User.current)
