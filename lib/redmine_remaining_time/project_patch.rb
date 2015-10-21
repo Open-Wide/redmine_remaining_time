@@ -9,22 +9,63 @@ module RedmineRemainingTime
       base.class_eval do
         unloadable
       end
-
     end
-  end
 
-  module ClassMethods
-  end
-
-  module InstanceMethods
-    
-    def sold_hours
-      @sold_hours ||= self.issues.sum(:sold_hours) || 0
+    module ClassMethods
     end
-    
+
+    module InstanceMethods
+      def sold_hours
+        if Setting.display_subprojects_issues?
+          @sold_hours ||= self_and_descendants.sum{ |p| p.issues.sum(:sold_hours) } || 0
+        else
+          @sold_hours ||= issues.sum(:sold_hours) || 0
+        end
+      end
+      
+      def estimated_hours
+        if Setting.display_subprojects_issues?
+          @estimated_hours ||= self_and_descendants.sum{ |p| p.issues.where('parent_id IS NULL').sum(:estimated_hours) } || 0
+        else
+          @estimated_hours ||= issues.where('parent_id IS NULL').sum(:estimated_hours) || 0
+        end
+      end
+      
+      def remaining_hours
+        if Setting.display_subprojects_issues?
+          @remaining_hours ||= self_and_descendants.sum{ |p| p.issues.where('parent_id IS NULL').sum(:remaining_hours) } || 0
+        else
+          @remaining_hours ||= issues.where('parent_id IS NULL').sum(:remaining_hours) || 0
+        end
+      end
+      
+      def spent_hours
+        if Setting.display_subprojects_issues?
+          @spent_hours ||= self_and_descendants.sum{ |p| p.time_entries.sum(:hours) } || 0
+        else
+          @spent_hours ||= time_entries.sum(:hours) || 0
+        end
+      end
+      
+      def total_hours
+          @total_hours ||= remaining_hours + spent_hours || 0
+      end 
+      
+      def delta_hours
+          @delta_hours ||= total_hours - estimated_hours || 0
+      end
+      
+      def done_ratio
+        if Setting.display_subprojects_issues?
+          @done_ratio ||= self_and_descendants.sum{ |p| p.issues.where('parent_id IS NULL').sum(:done_ratio) } / self_and_descendants.sum{ |p| p.issues.where('parent_id IS NULL').count } || 0
+        else
+          @done_ratio ||= issues.where('parent_id IS NULL').sum(:done_ratio) / issues.where('parent_id IS NULL').count || 0
+        end
+      end
+    end
   end
 end
 
 unless Project.included_modules.include? RedmineRemainingTime::ProjectPatch
-Project.send(:include, RedmineRemainingTime::ProjectPatch)
+  Project.send(:include, RedmineRemainingTime::ProjectPatch)
 end

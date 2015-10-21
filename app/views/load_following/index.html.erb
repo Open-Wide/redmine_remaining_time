@@ -46,18 +46,14 @@
                 </tr>
             </thead>
             <tbody>
-                <% for issue in @issues %>
-                  <% 
-                  depth = 0
-                  issue_css_classes = "#{cycle('odd', 'even')} #{issue.css_classes}"
-                %>
-                  <%= render 'row', issue: issue, issue_css_classes: issue_css_classes, depth: depth %>
+                <% issue_list(@project.issues.order("#{Issue.table_name}.root_id", "#{Issue.table_name}.lft ASC")) do |issue, level| -%>
+                  <%= render 'row', issue: issue, level: level %>
                 <% end %>
                 <% for subproject in @subprojects %>
-                  <tr id="project-<%= h(subproject[:project].id) %>" class="hascontextmenu <%= cycle('odd', 'even') %>">
+                  <tr id="project-<%= h(subproject.id) %>" class="project parent">
                       <td class="id"></td>
                       <td class="subject">
-                          <%= link_to(subproject[:project], project_path(subproject[:project])) %>
+                          <%= link_to(subproject, project_path(subproject)) %>
                       </td>
                       <td class="sold_hours">
                       </td>
@@ -82,54 +78,50 @@
                       <td class="done_ratio">
                       </td>
                   </tr>
-                  <% for issue in subproject[:issues] %>
-                    <% 
-                    depth = 1
-                    issue_css_classes = "#{issue.css_classes} idnt idnt-#{depth}"
-                  %>
-                    <%= render 'row', issue: issue, issue_css_classes: issue_css_classes, depth: depth %>
+                  <% issue_list(subproject.issues.order("#{Issue.table_name}.root_id", "#{Issue.table_name}.lft ASC")) do |issue, level| -%>
+                    <%= render 'row', issue: issue, level: level+1 %>
                   <% end %>
                 <% end %>
             </tbody>
-            <tfooter>
+            <tfoot>
                 <tr>
                     <td class="id"></td>
                     <td class="subject">Totaux</td>
                     <td class="sold_hours">
-                        <%= "%.2f" % @sum_sold_hours  %>
+                        <%= "%.2f" % @project.sold_hours  %>
                     </td>
                     <td class="estimated_hours">
-                        <%= "%.2f" % @sum_estimated_hours  %>
+                        <%= "%.2f" % @project.estimated_hours  %>
                     </td>
                     <td class="total_spent_hours">
-                        <%= "%.2f" % @sum_spent_time  %>
+                        <%= "%.2f" % @project.spent_hours  %>
                     </td>
                     <td class="total_spent_hours">
-                        <%= "%.2f" % @sum_spent_time  %>
+                        <%= "%.2f" % @project.spent_hours  %>
                     </td>
                     <td class="total_spent_hours">
-                        <%= "%.2f" % @sum_spent_time  %>
+                        <%= "%.2f" % @project.spent_hours  %>
                     </td>
                     <td class="remaining_hours">
-                        <%=  "%.2f" % @sum_remaining_hours  %>
+                        <%=  "%.2f" % @project.remaining_hours  %>
                     </td>
                     <td class="remaining_hours">
-                        <%= "%.2f" % @sum_remaining_hours  %>
+                        <%= "%.2f" % @project.remaining_hours  %>
                     </td>
                     <td class="total_hours">
-                        <%= "%.2f" % @sum_total_hours  %>
+                        <%= "%.2f" % @project.total_hours  %>
                     </td>
                     <td class="total_hours">
-                        <%= "%.2f" % @sum_total_hours  %>
+                        <%= "%.2f" % @project.total_hours  %>
                     </td>
                     <td class="delta_hours">
-                        <%= "%.2f" % @sum_delta_estimated_time  %>
+                        <%= "%.2f" % @project.delta_hours  %>
                     </td>
                     <td class="done_ratio">
-                        <%= "%.2f" % @sum_done_ration  %>
+                        <%= "%.2f" % @project.done_ratio  %>
                     </td>
                 </tr>
-            </tfooter>
+            </tfoot>
         </table>
     </div>
 </div>

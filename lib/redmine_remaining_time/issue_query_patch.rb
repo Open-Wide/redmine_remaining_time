@@ -23,14 +23,14 @@ module RedmineRemainingTime
           ))
       end
     end
-  end
   
-  module ClassMethods
-  end
+    module ClassMethods
+    end
   
-  module InstanceMethods
-  end
+    module InstanceMethods
+    end
       
+  end
 end
 
 unless IssueQuery.included_modules.include? RedmineRemainingTime::IssueQueryPatch

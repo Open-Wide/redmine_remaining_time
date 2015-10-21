@@ -50,13 +50,33 @@ table.issues tr.delta-hours-exact td.delta_hours  {
 }
 
 .controller-load_following #sidebar {
-    display: none;
+    display: none
 }
 
 .controller-load_following #content {
-    width: 100%;
+    width: 100%
+}
+
+.controller-load_following table.list {
+    border: 1px solid #e4e4e4
 }
 
 .controller-load_following table.list th {
     white-space: normal
+}
+
+.controller-load_following table.list tr.project {
+    background: #EEEEEE
+}
+
+.controller-load_following table.list tr.issue:nth-child(even) {
+    background: #ffffff
+}
+
+.controller-load_following table.list tr.issue:nth-child(odd) {
+    background-color: #f6f7f8
+}
+
+.controller-load_following table.list tfoot {
+    font-weight: bold
 }
