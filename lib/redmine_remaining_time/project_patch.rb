@@ -57,9 +57,9 @@ module RedmineRemainingTime
   
       def spent_hours_current_week
         if Setting.display_subprojects_issues?
-          @spent_hours_current_week ||= self_and_descendants.sum{ |p| p.time_entries.where('spent_on > ?', Issue.previousw_enddate).sum(:hours) } || 0
+          @spent_hours_current_week ||= self_and_descendants.sum{ |p| p.time_entries.where('spent_on >= ?', Issue.currentw_startdate).sum(:hours) } || 0
         else
-          @spent_hours_current_week ||= time_entries.where('spent_on > ?', Issue.previousw_enddate).sum(:hours) || 0
+          @spent_hours_current_week ||= time_entries.where('spent_on >= ?', Issue.currentw_startdate).sum(:hours) || 0
         end
       end
       

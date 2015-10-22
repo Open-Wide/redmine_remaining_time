@@ -62,7 +62,7 @@ module RedmineRemainingTime
       end
   
       def spent_hours_current_week
-        @spent_hours_current_week ||= time_entries.where('spent_on > ?', Issue.previousw_enddate).sum(:hours) || nil
+        @spent_hours_current_week ||= time_entries.where('spent_on >= ?', Issue.currentw_startdate).sum(:hours) || nil
       end
   
       def remaining_hours_previous_week
