@@ -35,17 +35,17 @@ table.issues tr.parent td.delta_hours {
 }
 
 div.issue table.attributes .delta-hours-less,
-table.issues tr.delta-hours-less td.delta_hours {
+table.list tr.delta-hours-less td.delta_hours {
     color: #800
 }
 
 div.issue table.attributes .delta-hours-more,
-table.issues tr.delta-hours-more td.delta_hours {
+table.list tr.delta-hours-more td.delta_hours {
     color: #005f00
 }
 
 div.issue table.attributes .delta-hours-exact,
-table.issues tr.delta-hours-exact td.delta_hours  {
+table.list tr.delta-hours-exact td.delta_hours  {
     color: #F89406
 }
 

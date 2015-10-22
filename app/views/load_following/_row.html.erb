@@ -19,7 +19,7 @@
           <%= "%.2f" % issue.spent_hours_current_week if issue.leaf? and !issue.spent_hours_current_week.nil? %>
       </td>
       <td class="total_spent_hours">
-          <%= "%.2f" % issue.spent_hours if issue.leaf? and !issue.spent_hours.nil? %>
+          <%= "%.2f" % issue.spent_hours if !issue.spent_hours.nil? and ( issue.leaf? or issue.children? and issue.spent_hours > 0 ) %>
       </td>
       <td class="remaining_hours">
           <%= "%.2f" % issue.remaining_hours_previous_week if issue.leaf? and !issue.remaining_hours_previous_week.nil? %>
