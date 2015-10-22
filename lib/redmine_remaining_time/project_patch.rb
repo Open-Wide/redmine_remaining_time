@@ -38,6 +38,10 @@ module RedmineRemainingTime
           @remaining_hours ||= issues.where('parent_id IS NULL').sum(:remaining_hours) || 0
         end
       end
+  
+      def remaining_hours_previous_week
+        @remaining_hours_previous_week ||= nil
+      end
       
       def spent_hours
         if Setting.display_subprojects_issues?
@@ -65,6 +69,14 @@ module RedmineRemainingTime
       
       def delta_hours
           @delta_hours ||= total_hours - estimated_hours || 0
+      end
+      
+      def delta_hours_previous_week
+        @delta_hours_previous_week ||= nil
+      end
+      
+      def delta_hours_current_week
+        @delta_hours_current_week ||=nil
       end
       
       def done_ratio

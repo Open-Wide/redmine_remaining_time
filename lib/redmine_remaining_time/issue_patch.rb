@@ -54,28 +54,48 @@ module RedmineRemainingTime
     module InstanceMethods
   
       def total_hours
-        @total_hours ||= ( self.total_spent_hours.to_f + self.remaining_hours.to_f ).round(2) || 0
+        @total_hours ||= ( self.total_spent_hours.to_f + self.remaining_hours.to_f ) || 0
       end
   
       def spent_hours_previous_week
-        @spent_hours_previous_week ||= spent_hours - spent_hours_current_week || 0
+        @spent_hours_previous_week ||= spent_hours - spent_hours_current_week || nil
       end
   
       def spent_hours_current_week
-        @spent_hours_current_week ||= time_entries.where('spent_on > ?', Issue.previousw_enddate).sum(:hours) || 0
+        @spent_hours_current_week ||= time_entries.where('spent_on > ?', Issue.previousw_enddate).sum(:hours) || nil
       end
   
+      def remaining_hours_previous_week
+        @remaining_hours_previous_week ||= nil
+      end
+      
       def delta_hours
-        @delta_hours ||= ( self.total_hours.to_f - self.estimated_hours.to_f ) || 0
+        @delta_hours ||= ( self.estimated_hours.nil? or self.remaining_hours.nil? ? nil : ( self.total_hours.to_f - self.estimated_hours.to_f ) ) || nil
+        if !@delta_hours.is_a? Float
+          @delta_hours = nil
+        end
+        @delta_hours
+      end
+      
+      def delta_hours_previous_week
+        @delta_hours_previous_week ||= nil
+      end
+      
+      def delta_hours_current_week
+        @delta_hours_current_week ||=nil
       end
     
       def delta_hours_status
-        if self.delta_hours.to_f > 0
-          'less'
-        elsif self.delta_hours.to_f < 0
-          'more'
-        else  
-          'exact'
+        if !self.delta_hours.is_a? Float
+          'none'
+        else
+          if self.delta_hours.to_f > 0
+            'less'
+          elsif self.delta_hours.to_f < 0
+            'more'
+          else  
+            'exact'
+          end
         end
       end
     

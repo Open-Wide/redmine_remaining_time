@@ -22,16 +22,16 @@
           <%= "%.2f" % issue.spent_hours if issue.leaf? and !issue.spent_hours.nil? %>
       </td>
       <td class="remaining_hours">
-          <%= "%.2f" % issue.remaining_hours if issue.leaf? and !issue.remaining_hours.nil? %>
+          <%= "%.2f" % issue.remaining_hours_previous_week if issue.leaf? and !issue.remaining_hours_previous_week.nil? %>
       </td>
       <td class="remaining_hours">
           <%= "%.2f" % issue.remaining_hours if issue.leaf? and !issue.remaining_hours.nil? %>
       </td>
-      <td class="total_hours">
-          <%= "%.2f" % issue.total_hours if issue.leaf? and !issue.total_hours.nil? %>
+      <td class="delta_hours_previous_week">
+          <%= "%.2f" % issue.delta_hours_previous_week if issue.leaf? and !issue.delta_hours_previous_week.nil? %>
       </td>
       <td class="total_hours">
-          <%= "%.2f" % issue.total_hours if issue.leaf? and !issue.total_hours.nil? %>
+          <%= "%.2f" % issue.delta_hours_current_week if issue.leaf? and !issue.delta_hours_current_week.nil? %>
       </td>
       <td class="delta_hours">
           <%= "%.2f" % issue.delta_hours if issue.leaf? and !issue.delta_hours.nil? %>

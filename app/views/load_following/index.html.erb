@@ -88,37 +88,37 @@
                     <td class="id"></td>
                     <td class="subject">Totaux</td>
                     <td class="sold_hours">
-                        <%= "%.2f" % @project.sold_hours  %>
+                        <%= "%.2f" % @project.sold_hours unless @project.sold_hours.nil? %>
                     </td>
                     <td class="estimated_hours">
-                        <%= "%.2f" % @project.estimated_hours  %>
+                        <%= "%.2f" % @project.estimated_hours unless @project.estimated_hours.nil? %>
                     </td>
                     <td class="spent_hours_previous_week">
-                        <%= "%.2f" % @project.spent_hours_previous_week  %>
+                        <%= "%.2f" % @project.spent_hours_previous_week unless @project.spent_hours_previous_week.nil? %>
                     </td>
                     <td class="spent_hours_current_week">
-                        <%= "%.2f" % @project.spent_hours_current_week  %>
+                        <%= "%.2f" % @project.spent_hours_current_week unless @project.spent_hours_current_week.nil? %>
                     </td>
                     <td class="total_spent_hours">
-                        <%= "%.2f" % @project.spent_hours  %>
+                        <%= "%.2f" % @project.spent_hours unless @project.spent_hours.nil? %>
+                    </td>
+                    <td class="remaining_hours_previous_week">
+                        <%=  "%.2f" % @project.remaining_hours_previous_week unless @project.remaining_hours_previous_week.nil? %>
                     </td>
                     <td class="remaining_hours">
-                        <%=  "%.2f" % @project.remaining_hours  %>
+                        <%= "%.2f" % @project.remaining_hours unless @project.remaining_hours.nil? %>
                     </td>
-                    <td class="remaining_hours">
-                        <%= "%.2f" % @project.remaining_hours  %>
+                    <td class="delta_hours_previous_week">
+                        <%= "%.2f" % @project.delta_hours_previous_week unless @project.delta_hours_previous_week.nil? %>
                     </td>
-                    <td class="total_hours">
-                        <%= "%.2f" % @project.total_hours  %>
-                    </td>
-                    <td class="total_hours">
-                        <%= "%.2f" % @project.total_hours  %>
+                    <td class="delta_hours_current_week">
+                        <%= "%.2f" % @project.delta_hours_current_week unless @project.delta_hours_current_week.nil? %>
                     </td>
                     <td class="delta_hours">
-                        <%= "%.2f" % @project.delta_hours  %>
+                        <%= "%.2f" % @project.delta_hours unless @project.delta_hours.nil? %>
                     </td>
                     <td class="done_ratio">
-                        <%= "%.2f" % @project.done_ratio  %>
+                        <%= "%.2f" % @project.done_ratio unless @project.done_ratio.nil? %>
                     </td>
                 </tr>
             </tfoot>
