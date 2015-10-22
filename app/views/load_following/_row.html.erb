@@ -30,11 +30,11 @@
       <td class="delta_hours_previous_week">
           <%= "%.2f" % issue.delta_hours_previous_week if issue.leaf? and !issue.delta_hours_previous_week.nil? %>
       </td>
-      <td class="total_hours">
-          <%= "%.2f" % issue.delta_hours_current_week if issue.leaf? and !issue.delta_hours_current_week.nil? %>
-      </td>
       <td class="delta_hours">
           <%= "%.2f" % issue.delta_hours if issue.leaf? and !issue.delta_hours.nil? %>
+      </td>
+      <td class="delta_hours_current_week">
+          <%= "%.2f" % issue.delta_hours_current_week if issue.leaf? and !issue.delta_hours_current_week.nil? %>
       </td>
       <td class="done_ratio">
           <%= "%d" % issue.done_ratio if issue.leaf? and !issue.done_ratio.nil? %>

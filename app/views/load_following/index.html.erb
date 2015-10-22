@@ -111,11 +111,11 @@
                     <td class="delta_hours_previous_week">
                         <%= "%.2f" % @project.delta_hours_previous_week unless @project.delta_hours_previous_week.nil? %>
                     </td>
-                    <td class="delta_hours_current_week">
-                        <%= "%.2f" % @project.delta_hours_current_week unless @project.delta_hours_current_week.nil? %>
-                    </td>
                     <td class="delta_hours">
                         <%= "%.2f" % @project.delta_hours unless @project.delta_hours.nil? %>
+                    </td>
+                    <td class="delta_hours_current_week">
+                        <%= "%.2f" % @project.delta_hours_current_week unless @project.delta_hours_current_week.nil? %>
                     </td>
                     <td class="done_ratio">
                         <%= "%.2f" % @project.done_ratio unless @project.done_ratio.nil? %>
