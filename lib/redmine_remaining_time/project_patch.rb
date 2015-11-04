@@ -68,7 +68,7 @@ module RedmineRemainingTime
       end 
       
       def delta_hours
-          @delta_hours ||= total_hours - estimated_hours || 0
+          @delta_hours ||= total_hours - sold_hours || 0
       end
       
       def delta_hours_previous_week
