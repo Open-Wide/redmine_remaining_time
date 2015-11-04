@@ -1,0 +1,43 @@
+<% if row %>
+  <tr id="issue-<%= h(row.id) %>" class="<%= row.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
+      <td class="id">
+          <%= link_to(row.id, issue_path(row)) %>
+      </td>
+      <td class="subject">
+          <%= link_to(row, issue_path(row)) %>
+      </td>
+      <td class="sold_hours">
+          <%= "%.2f" % row.sold_hours unless row.sold_hours.nil? %>
+      </td>
+      <td class="estimated_hours">
+          <%= "%.2f" % row.estimated_hours if row.leaf? and !row.estimated_hours.nil? %>
+      </td>
+      <td class="spent_hours_previous_week">
+          <%= "%.2f" % row.spent_hours_previous_week if row.leaf? and !row.spent_hours_previous_week.nil? %>
+      </td>
+      <td class="spent_hours_current_week">
+          <%= "%.2f" % row.spent_hours_current_week if row.leaf? and !row.spent_hours_current_week.nil? %>
+      </td>
+      <td class="total_spent_hours">
+          <%= "%.2f" % row.spent_hours if !row.spent_hours.nil? and ( row.leaf? or row.children? and row.spent_hours > 0 ) %>
+      </td>
+      <td class="remaining_hours">
+          <%= "%.2f" % row.remaining_hours_previous_week if row.leaf? and !row.remaining_hours_previous_week.nil? %>
+      </td>
+      <td class="remaining_hours">
+          <%= "%.2f" % row.remaining_hours if row.leaf? and !row.remaining_hours.nil? %>
+      </td>
+      <td class="delta_hours_previous_week">
+          <%= "%.2f" % row.delta_hours_previous_week if row.leaf? and !row.delta_hours_previous_week.nil? %>
+      </td>
+      <td class="delta_hours">
+          <%= "%.2f" % row.delta_hours unless row.delta_hours.nil? %>
+      </td>
+      <td class="delta_hours_current_week">
+          <%= "%.2f" % row.delta_hours_current_week if row.leaf? and !row.delta_hours_current_week.nil? %>
+      </td>
+      <td class="done_ratio">
+          <%= "%d" % row.done_ratio if row.leaf? and !row.done_ratio.nil? %>
+      </td>
+  </tr>
+<% end %>

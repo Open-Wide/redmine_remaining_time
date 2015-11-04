@@ -8,9 +8,12 @@ class LoadFollowingController < ApplicationController
   accept_api_auth :index
   
   def index
-    @subprojects = []
+    @rows = @project.issues.order("#{Issue.table_name}.root_id", "#{Issue.table_name}.lft ASC")
     if Setting.display_subprojects_issues?
-      @subprojects = @project.descendants
+      for subproject in @project.descendants
+        @rows << subproject
+        @rows += subproject.issues.order("#{Issue.table_name}.root_id", "#{Issue.table_name}.lft ASC")
+      end
     end
   end
 

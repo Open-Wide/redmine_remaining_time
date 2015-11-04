@@ -46,41 +46,12 @@
                 </tr>
             </thead>
             <tbody>
-                <% issue_list(@project.issues.order("#{Issue.table_name}.root_id", "#{Issue.table_name}.lft ASC")) do |issue, level| -%>
-                  <%= render 'row', issue: issue, level: level %>
+                <% issue_list(@rows) do |row, level| -%>
+                <% if row.is_a? Issue %>
+                  <%= render 'row_issue', row: row, level: level %>
+                <% else %>
+                  <%= render 'row_project', row: row, level: level %>
                 <% end %>
-                <% for subproject in @subprojects %>
-                  <tr id="project-<%= h(subproject.id) %>" class="project parent">
-                      <td class="id"></td>
-                      <td class="subject">
-                          <%= link_to(subproject, project_path(subproject)) %>
-                      </td>
-                      <td class="sold_hours">
-                      </td>
-                      <td class="estimated_hours">
-                      </td>
-                      <td class="total_spent_hours">
-                      </td>
-                      <td class="total_spent_hours">
-                      </td>
-                      <td class="total_spent_hours">
-                      </td>
-                      <td class="remaining_hours">
-                      </td>
-                      <td class="remaining_hours">
-                      </td>
-                      <td class="total_hours">
-                      </td>
-                      <td class="total_hours">
-                      </td>
-                      <td class="delta_hours">
-                      </td>
-                      <td class="done_ratio">
-                      </td>
-                  </tr>
-                  <% issue_list(subproject.issues.order("#{Issue.table_name}.root_id", "#{Issue.table_name}.lft ASC")) do |issue, level| -%>
-                    <%= render 'row', issue: issue, level: level+1 %>
-                  <% end %>
                 <% end %>
             </tbody>
             <tfoot>

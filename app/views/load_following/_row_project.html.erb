@@ -1,0 +1,31 @@
+<% if row %>
+  <tr id="project-<%= h(row.id) %>" class="<%= row.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
+      <td class="id">
+      </td>
+      <td class="subject">
+          <%= link_to(row, issue_path(row)) %>
+      </td>
+      <td class="sold_hours">
+      </td>
+      <td class="estimated_hours">
+      </td>
+      <td class="spent_hours_previous_week">
+      </td>
+      <td class="spent_hours_current_week">
+      </td>
+      <td class="total_spent_hours">
+      </td>
+      <td class="remaining_hours">
+      </td>
+      <td class="remaining_hours">
+      </td>
+      <td class="delta_hours_previous_week">
+      </td>
+      <td class="delta_hours">
+      </td>
+      <td class="delta_hours_current_week">
+      </td>
+      <td class="done_ratio">
+      </td>
+  </tr>
+<% end %>

@@ -70,7 +70,11 @@ module RedmineRemainingTime
       end
       
       def delta_hours
-        @delta_hours ||= ( self.estimated_hours.nil? or self.remaining_hours.nil? ? nil : ( self.total_hours.to_f - self.estimated_hours.to_f ) ) || nil
+        if self.leaf?
+          @delta_hours ||= ( ( self.sold_hours.nil? and self.total_hours.nil? ) ? nil : ( self.total_hours.to_f - self.sold_hours.to_f ) ) || nil
+        else
+          @delta_hours ||= ( ( self.sold_hours.nil? and self.spent_hours == 0.0 ) ? nil : ( self.spent_hours.to_f - self.sold_hours.to_f ) ) || nil
+        end
         if !@delta_hours.is_a? Float
           @delta_hours = nil
         end
