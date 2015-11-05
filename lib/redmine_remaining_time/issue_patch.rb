@@ -139,7 +139,7 @@ module RedmineRemainingTime
         if children?
           @lf_emaining_hours_previous_week ||= nil
         else
-          journal = JournalDetail.select(:value).joins(:journal).where( :journals => { :created_on => (Issue.load_following_startdate..Issue.load_following_enddate), :journalized_id => id, :journalized_type => 'Issue' }, :prop_key => 'remaining_hours' ).order( 'journals.created_on ASC' ).first
+          journal = JournalDetail.select(:old_value).joins(:journal).where( :journals => { :created_on => (Issue.load_following_startdate..Issue.load_following_enddate), :journalized_id => id, :journalized_type => 'Issue' }, :prop_key => 'remaining_hours' ).order( 'journals.created_on ASC' ).first
           if journal
             @lf_emaining_hours_previous_week ||= journal.old_value || self.remaining_hours
           else
