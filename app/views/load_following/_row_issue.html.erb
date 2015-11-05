@@ -19,7 +19,7 @@
           <%= "%.2f" % row.spent_hours_current_week if row.leaf? and !row.spent_hours_current_week.nil? %>
       </td>
       <td class="total_spent_hours">
-          <%= "%.2f" % row.spent_hours if !row.spent_hours.nil? and ( row.leaf? or row.children? and row.spent_hours > 0 ) %>
+          <%= "%.2f" % row.spent_hours if !row.spent_hours.nil? and ( row.leaf? or ( row.children? and row.spent_hours > 0 ) ) %>
       </td>
       <td class="remaining_hours">
           <%= "%.2f" % row.remaining_hours_previous_week if row.leaf? and !row.remaining_hours_previous_week.nil? %>
