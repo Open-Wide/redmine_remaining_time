@@ -40,14 +40,14 @@ module RedmineRemainingTime
         @last_wday ||= (Issue.first_wday + 5)%7 + 1
       end
       
-      def previousw_enddate
-        date = Date.today
-        @previousw_enddate ||= date - date.wday - Issue.last_wday
+      def load_following_startdate
+        date  = Date.today
+        @load_following_startdate ||= date - date.wday - 7
       end
       
-      def currentw_startdate
-        date  = Date.today
-        @currentw_startdate ||= date - date.wday + Issue.first_wday
+      def load_following_enddate
+        date = Date.today
+        @load_following_enddate ||= date - date.wday - 1
       end
     end
 
@@ -56,37 +56,17 @@ module RedmineRemainingTime
       def total_hours
         @total_hours ||= ( self.total_spent_hours.to_f + self.remaining_hours.to_f ) || 0
       end
-  
-      def spent_hours_previous_week
-        @spent_hours_previous_week ||= spent_hours - spent_hours_current_week || nil
-      end
-  
-      def spent_hours_current_week
-        @spent_hours_current_week ||= time_entries.where('spent_on >= ?', Issue.currentw_startdate).sum(:hours) || nil
-      end
-  
-      def remaining_hours_previous_week
-        @remaining_hours_previous_week ||= nil
-      end
       
       def delta_hours
         if self.leaf?
-          @delta_hours ||= ( ( self.sold_hours.nil? and self.total_hours.nil? ) ? nil : ( self.total_hours.to_f - self.sold_hours.to_f ) ) || nil
+          @delta_hours ||= ( ( sold_hours.nil? and self.total_hours.nil? ) ? nil : ( self.total_hours.to_f - sold_hours.to_f ) ) || nil
         else
-          @delta_hours ||= ( ( self.sold_hours.nil? and self.spent_hours == 0.0 ) ? nil : ( self.spent_hours.to_f - self.sold_hours.to_f ) ) || nil
+          @delta_hours ||= ( ( sold_hours.nil? and self.spent_hours == 0.0 ) ? nil : ( self.spent_hours.to_f - sold_hours.to_f ) ) || nil
         end
         if !@delta_hours.is_a? Float
           @delta_hours = nil
         end
         @delta_hours
-      end
-      
-      def delta_hours_previous_week
-        @delta_hours_previous_week ||= nil
-      end
-      
-      def delta_hours_current_week
-        @delta_hours_current_week ||=nil
       end
     
       def delta_hours_status
@@ -102,7 +82,128 @@ module RedmineRemainingTime
           end
         end
       end
+  
+      def lf_total_hours
+        if !lf_spent_hours.nil? or !lf_remaining_hours.nil?
+          @lf_total_hours ||= ( lf_spent_hours.to_f + lf_remaining_hours.to_f ) || nil
+        end
+        @lf_total_hours ||= nil
+      end
+  
+      def lf_total_hours_previous_week
+        if !lf_spent_hours_previous_week.nil? or !lf_remaining_hours_previous_week.nil?
+          @lf_total_hours_previous_week ||= ( lf_spent_hours_previous_week.to_f + lf_remaining_hours_previous_week.to_f ) || nil
+        end
+        @lf_total_hours_previous_week ||= nil
+      end
+      
+      def lf_spent_hours
+        @lf_spent_hours ||= time_entries.where('spent_on <= ?', Issue.load_following_enddate).sum(:hours) || nil
+        if children? and @lf_spent_hours == 0.0
+          @lf_spent_hours = nil
+        end
+        @lf_spent_hours
+      end
+  
+      def lf_spent_hours_previous_week
+        @lf_spent_hours_previous_week ||= lf_spent_hours.to_f - lf_spent_hours_current_week.to_f || nil
+        if children? and @lf_spent_hours_previous_week == 0.0
+          @lf_spent_hours_previous_week = nil
+        end
+        @lf_spent_hours_previous_week
+      end
+  
+      def lf_spent_hours_current_week
+        @lf_spent_hours_current_week ||= time_entries.where('spent_on BETWEEN ? AND ?', Issue.load_following_startdate, Issue.load_following_enddate).sum(:hours) || nil
+        if children? and @lf_spent_hours_current_week == 0.0
+          @lf_spent_hours_current_week = nil
+        end
+        @lf_spent_hours_current_week
+      end
+      
+      def lf_remaining_hours
+        if children?
+          @lf_emaining_hours_previous_week ||= nil
+        else
+          journal = JournalDetail.select(:value).joins(:journal).where( :journals => { :created_on => (Issue.load_following_startdate..Issue.load_following_enddate), :journalized_id => id, :journalized_type => 'Issue' }, :prop_key => 'remaining_hours' ).order( 'journals.created_on DESC' ).first
+           if journal
+             @lf_remaining_hours ||= journal.value || self.remaining_hours
+          else
+            @lf_remaining_hours ||= self.remaining_hours
+          end
+        end
+        @lf_remaining_hours ||= nil
+      end
+  
+      def lf_remaining_hours_previous_week
+        if children?
+          @lf_emaining_hours_previous_week ||= nil
+        else
+          journal = JournalDetail.select(:value).joins(:journal).where( :journals => { :created_on => (Issue.load_following_startdate..Issue.load_following_enddate), :journalized_id => id, :journalized_type => 'Issue' }, :prop_key => 'remaining_hours' ).order( 'journals.created_on ASC' ).first
+          if journal
+            @lf_emaining_hours_previous_week ||= journal.old_value || self.remaining_hours
+          else
+            @lf_emaining_hours_previous_week ||= self.remaining_hours
+          end
+        end
+        @lf_emaining_hours_previous_week ||= nil
+      end
     
+      def lf_delta_hours_status
+        if !lf_delta_hours.is_a? Float
+          'none'
+        else
+          if lf_delta_hours.to_f > 0
+            'less'
+          elsif lf_delta_hours.to_f < 0
+            'more'
+          else  
+            'exact'
+          end
+        end
+      end
+      
+      def lf_delta_hours
+        if self.leaf?
+          @lf_delta_hours ||= ( ( sold_hours.nil? and lf_total_hours.nil? ) ? nil : ( lf_total_hours.to_f - sold_hours.to_f ) ) || nil
+        else
+          @lf_delta_hours ||= ( ( sold_hours.nil? and lf_spent_hours.nil? ) ? nil : ( lf_spent_hours.to_f - sold_hours.to_f ) ) || nil
+        end
+        if !@lf_delta_hours.is_a? Float
+          @lf_delta_hours = nil
+        end
+        @lf_delta_hours
+      end
+      
+      def lf_delta_hours_previous_week
+        if self.leaf?
+          @lf_delta_hours_previous_week ||= ( ( sold_hours.nil? and lf_total_hours_previous_week.nil? ) ? nil : ( lf_total_hours_previous_week.to_f - sold_hours.to_f ) ) || nil
+        else
+          @lf_delta_hours_previous_week ||= ( ( sold_hours.nil? and lf_spent_hours_previous_week.nil? ) ? nil : ( lf_spent_hours_previous_week.to_f - sold_hours.to_f ) ) || nil
+        end
+        if !@lf_delta_hours_previous_week.is_a? Float
+          @lf_delta_hours_previous_week = nil
+        end
+        @lf_delta_hours_previous_week
+      end
+      
+      def lf_delta_hours_current_week
+        @lf_delta_hours_current_week ||= ( lf_delta_hours.nil? and lf_delta_hours_previous_week.nil? ) ? nil : ( lf_delta_hours.to_f - lf_delta_hours_previous_week.to_f ) || nil
+      end
+    
+      def lf_done_ratio
+        if lf_remaining_hours.nil? and lf_total_hours.nil? and lf_spent_hours.nil?
+          @lf_done_ratio = nil
+        elsif lf_remaining_hours.to_f.eql? 0.0
+          @lf_done_ratio = 100
+        else
+          if ( lf_total_hours ) != 0
+            @lf_done_ratio = lf_spent_hours.to_f / ( lf_total_hours ) * 100
+          end
+        end
+        @lf_done_ratio ||= nil
+      end
+      
       def update_done_ratio_from_remaining_hours
         leaves_count = self.leaves.count
         if leaves_count > 0

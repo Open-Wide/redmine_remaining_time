@@ -1,5 +1,6 @@
 <div class="project_load_following">
-    <h2><%= @project %></h2>
+    <h2><%= @project %> - S<%= Issue.load_following_enddate.cweek %>/<%= Issue.load_following_enddate.year %>
+        (du <%= Issue.load_following_startdate %> au <%= Issue.load_following_enddate %>)</h2>
     <div class="autoscroll">
         <table class="list load_following">
             <thead>
@@ -59,37 +60,37 @@
                     <td class="id"></td>
                     <td class="subject">Totaux</td>
                     <td class="sold_hours">
-                        <%= "%.2f" % @project.sold_hours unless @project.sold_hours.nil? %>
+                        <%= ( "%.2f" % @project.sold_hours unless @project.sold_hours.nil? ).to_s.gsub!('.',',') %>
                     </td>
                     <td class="estimated_hours">
-                        <%= "%.2f" % @project.estimated_hours unless @project.estimated_hours.nil? %>
+                        <%= ( "%.2f" % @project.estimated_hours unless @project.estimated_hours.nil? ).to_s.gsub!('.',',') %>
                     </td>
-                    <td class="spent_hours_previous_week">
-                        <%= "%.2f" % @project.spent_hours_previous_week unless @project.spent_hours_previous_week.nil? %>
+                    <td class="lf_spent_hours_previous_week">
+                        <%= ( "%.2f" % @project.lf_spent_hours_previous_week unless @project.lf_spent_hours_previous_week.nil? ).to_s.gsub!('.',',') %>
                     </td>
                     <td class="spent_hours_current_week">
-                        <%= "%.2f" % @project.spent_hours_current_week unless @project.spent_hours_current_week.nil? %>
+                        <%= ( "%.2f" % @project.lf_spent_hours_current_week unless @project.lf_spent_hours_current_week.nil? ).to_s.gsub!('.',',') %>
                     </td>
                     <td class="total_spent_hours">
-                        <%= "%.2f" % @project.spent_hours unless @project.spent_hours.nil? %>
+                        <%= ( "%.2f" % @project.lf_spent_hours unless @project.lf_spent_hours.nil? ).to_s.gsub!('.',',') %>
                     </td>
                     <td class="remaining_hours_previous_week">
-                        <%=  "%.2f" % @project.remaining_hours_previous_week unless @project.remaining_hours_previous_week.nil? %>
+                        <%= ( "%.2f" % @project.lf_remaining_hours_previous_week unless @project.lf_remaining_hours_previous_week.nil? ).to_s.gsub!('.',',') %>
                     </td>
                     <td class="remaining_hours">
-                        <%= "%.2f" % @project.remaining_hours unless @project.remaining_hours.nil? %>
+                        <%= ( "%.2f" % @project.lf_remaining_hours unless @project.lf_remaining_hours.nil? ).to_s.gsub!('.',',') %>
                     </td>
                     <td class="delta_hours_previous_week">
-                        <%= "%.2f" % @project.delta_hours_previous_week unless @project.delta_hours_previous_week.nil? %>
+                        <%= ( "%.2f" % @project.lf_delta_hours_previous_week unless @project.lf_delta_hours_previous_week.nil? ).to_s.gsub!('.',',') %>
                     </td>
                     <td class="delta_hours">
-                        <%= "%.2f" % @project.delta_hours unless @project.delta_hours.nil? %>
+                        <%= ( "%.2f" % @project.lf_delta_hours unless @project.lf_delta_hours.nil? ).to_s.gsub!('.',',') %>
                     </td>
                     <td class="delta_hours_current_week">
-                        <%= "%.2f" % @project.delta_hours_current_week unless @project.delta_hours_current_week.nil? %>
+                        <%= ( "%.2f" % @project.lf_delta_hours_current_week unless @project.lf_delta_hours_current_week.nil? ).to_s.gsub!('.',',') %>
                     </td>
                     <td class="done_ratio">
-                        <%= "%.2f" % @project.done_ratio unless @project.done_ratio.nil? %>
+                        <%= "%d" % @project.lf_done_ratio unless @project.lf_done_ratio.nil? %>
                     </td>
                 </tr>
             </tfoot>
