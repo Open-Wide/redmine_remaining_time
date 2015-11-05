@@ -6,37 +6,37 @@
       <td class="subject">
           <%= link_to(row, issue_path(row)) %>
       </td>
-      <td class="sold_hours">
+      <td class="sold_hours <%= "zero_value" if row.sold_hours.to_f == 0 %>">
           <%= ( "%.2f" % row.sold_hours unless row.sold_hours.nil? ).to_s.gsub!('.',',') %>
       </td>
-      <td class="estimated_hours">
+      <td class="estimated_hours <%= "zero_value" if row.estimated_hours.to_f == 0 %>">
           <%= ( "%.2f" % row.estimated_hours unless row.children? or row.estimated_hours.nil? ).to_s.gsub!('.',',') %>
       </td>
-      <td class="spent_hours_previous_week">
+      <td class="spent_hours_previous_week <%= "zero_value" if row.lf_spent_hours_previous_week.to_f == 0 %>">
           <%= ( "%.2f" % row.lf_spent_hours_previous_week unless row.lf_spent_hours_previous_week.nil? ).to_s.gsub!('.',',') %>
       </td>
-      <td class="spent_hours_current_week">
+      <td class="spent_hours_current_week <%= "zero_value" if row.lf_spent_hours_current_week.to_f == 0 %>">
           <%= ( "%.2f" % row.lf_spent_hours_current_week unless row.lf_spent_hours_current_week.nil? ).to_s.gsub!('.',',') %>
       </td>
-      <td class="total_spent_hours">
+      <td class="total_spent_hours <%= "zero_value" if row.lf_spent_hours.to_f == 0 %>">
           <%= ( "%.2f" % row.lf_spent_hours unless row.lf_spent_hours.nil? ).to_s.gsub!('.',',') %>
       </td>
-      <td class="remaining_hours">
+      <td class="remaining_hours <%= "zero_value" if row.lf_remaining_hours_previous_week.to_f == 0 %>">
           <%= ( "%.2f" % row.lf_remaining_hours_previous_week unless row.lf_remaining_hours_previous_week.nil? ).to_s.gsub!('.',',') %>
       </td>
-      <td class="remaining_hours">
+      <td class="remaining_hours <%= "zero_value" if row.lf_remaining_hours.to_f == 0 %>">
           <%= ( "%.2f" % row.lf_remaining_hours unless row.lf_remaining_hours.nil? ).to_s.gsub!('.',',') %>
       </td>
-      <td class="delta_hours_previous_week">
+      <td class="delta_hours_previous_week <%= "zero_value" if row.lf_delta_hours_previous_week.to_f == 0 %>">
           <%= ( "%.2f" % row.lf_delta_hours_previous_week unless row.lf_delta_hours_previous_week.nil? ).to_s.gsub!('.',',') %>
       </td>
-      <td class="delta_hours">
+      <td class="delta_hours <%= "zero_value" if row.lf_delta_hours.to_f == 0 %>">
           <%= ( "%.2f" % row.lf_delta_hours unless row.lf_delta_hours.nil? ).to_s.gsub!('.',',') %>
       </td>
-      <td class="delta_hours_current_week">
+      <td class="delta_hours_current_week <%= "zero_value" if row.lf_delta_hours_current_week.to_f == 0 %>">
           <%= ( "%.2f" % row.lf_delta_hours_current_week unless row.lf_delta_hours_current_week.nil? ).to_s.gsub!('.',',') %>
       </td>
-      <td class="done_ratio">
+      <td class="done_ratio <%= "zero_value" if row.lf_done_ratio.to_f == 0 %>">
           <%= "%d" % row.lf_done_ratio unless row.lf_done_ratio.nil? %>
       </td>
   </tr>

@@ -80,3 +80,7 @@ table.list tr.delta-hours-exact td.delta_hours  {
 .controller-load_following table.list tfoot {
     font-weight: bold
 }
+
+.controller-load_following table.list td.zero_value {
+    font-size: 75%;
+}
