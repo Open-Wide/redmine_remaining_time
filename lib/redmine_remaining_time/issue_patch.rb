@@ -126,8 +126,8 @@ module RedmineRemainingTime
           @lf_emaining_hours_previous_week ||= nil
         else
           journal = JournalDetail.select(:value).joins(:journal).where( :journals => { :created_on => (Issue.load_following_startdate..Issue.load_following_enddate), :journalized_id => id, :journalized_type => 'Issue' }, :prop_key => 'remaining_hours' ).order( 'journals.created_on DESC' ).first
-           if journal
-             @lf_remaining_hours ||= journal.value || self.remaining_hours
+          if journal
+            @lf_remaining_hours ||= journal.value || self.remaining_hours
           else
             @lf_remaining_hours ||= self.remaining_hours
           end
@@ -234,10 +234,42 @@ module RedmineRemainingTime
           # remaining = sum of leaves remaining
           p.remaining_hours = p.leaves.sum(:remaining_hours).to_f.round(2)
           p.remaining_hours = nil if p.remaining_hours == 0.0
+          
+          # priority = highest priority of children
+          if priority_position = p.children.joins(:priority).maximum("#{IssuePriority.table_name}.position")
+            p.priority = IssuePriority.find_by_position(priority_position)
+          end
 
+          # start/due dates = lowest/highest dates of children
+          p.start_date = p.children.minimum(:start_date)
+          p.due_date = p.children.maximum(:due_date)
+          if p.start_date && p.due_date && p.due_date < p.start_date
+            p.start_date, p.due_date = p.due_date, p.start_date
+          end
+
+          # done ratio = weighted average ratio of leaves
+          unless Issue.use_status_for_done_ratio? && p.status && p.status.default_done_ratio
+            leaves_count = p.leaves.count
+            if leaves_count > 0
+              average = p.leaves.where("estimated_hours > 0").average(:estimated_hours).to_f
+              if average == 0
+                average = 1
+              end
+              done = p.leaves.joins(:status).
+                sum("COALESCE(CASE WHEN estimated_hours > 0 THEN estimated_hours ELSE NULL END, #{average}) " +
+                  "* (CASE WHEN is_closed = #{connection.quoted_true} THEN 100 ELSE COALESCE(done_ratio, 0) END)").to_f
+              progress = done / (average * leaves_count)
+              p.done_ratio = progress.round
+            end
+          end
+
+          # estimate = sum of leaves estimates
+          p.estimated_hours = p.leaves.sum(:estimated_hours).to_f
+          p.estimated_hours = nil if p.estimated_hours == 0.0
+
+          # ancestors will be recursively updated
           p.save(:validate => false)
         end
-        recalculate_attributes_for_without_remaining_hours(issue_id)
       end
     
       def css_classes_with_remaining_hours(user=User.current)
